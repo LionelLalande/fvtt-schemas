@@ -2,147 +2,145 @@
   "$schema": "http://json-schema.org/draft-07/schema#",
   "title": "JSON schema for Foundry VTT system.json and module.json files.",
   "type": "object",
+  "required": ["id", "title", "description", "version", "compatibility"],
   "properties": {
     "id": {
-      "type": "string",
-      "description": "The unique package identifier. This must be lowercase and contain no special characters other than hyphens to separate multiple terms. This must also match the name of the directory."
+      "description": "The unique package identifier. This must be lowercase and contain no special characters other than hyphens to separate multiple terms. This must also match the name of the directory.",
+      "type": "string"
     },
     "title": {
-      "type": "string",
-      "description": "The human readable title of the package which is displayed in the Setup menu and elsewhere."
+      "description": "The human readable title of the package which is displayed in the Setup menu and elsewhere.",
+      "type": "string"
     },
     "description": {
-      "type": "string",
-      "description": "A description of the package which appears in the Setup menu. May contain HTML tags to structure and style the text."
+      "description": "A description of the package which appears in the Setup menu. May contain HTML tags to structure and style the text.",
+      "type": "string"
     },
     "version": {
-      "type": ["number", "string"],
-      "description": "Specifies the version number as a number or string. Incrementing this will allow Foundry to update the installed package for users and migrate their data if necessary."
+      "description": "Specifies the version number as a number or string. Incrementing this will allow Foundry to update the installed package for users and migrate their data if necessary.",
+      "type": ["number", "string"]
     },
     "author": {
-      "type": "string",
-      "description": "The person who created the package. Alternatively you may use the `authors` property if multiple people have to be credited."
+      "description": "The person who created the package. Alternatively you may use the `authors` property if multiple people have to be credited.",
+      "type": "string"
     },
     "authors": {
-      "type": "array",
-      "description": "Array of authors who have contributed to this package. Cannot be used together with `author`."
+      "description": "Array of authors who have contributed to this package. Cannot be used together with `author`.",
+      "type": "array"
     },
     "compatibility": {
-      "type": "object",
       "description": "Specifies the latest Foundry version this package is compatible with.",
-      "properties": {
-        "minimum": {
-          "type": ["number", "string"],
-          "description": "The minimum version for which the package will not function before."
-        },
-        "maximum": {
-          "type": ["number", "string"],
-          "description": "The maximum version for which the package will not function after."
-        },
-        "verified": {
-          "type": ["number", "string"],
-          "description": "The package has been successfully tested with this version."
+      "$ref": "#/$defs/Compatibility"
+    },
+    "scripts": {
+      "description": "A list of JavaScript file paths to include when this package is used. Paths are relative to the package root directory. Scripts will be loaded in the listed order as standard scripts.",
+      "$ref": "#/$defs/ArrayOfString"
+    },
+    "esmodules": {
+      "description": "A list of JavaScript ES modules to include when this package is used. Paths are relative to the package root directory. Modules will be loaded in the listed order as modules.",
+      "$ref": "#/$defs/ArrayOfString"
+    },
+    "styles": {
+      "description": "A list of CSS file paths to include when this package is used. Paths are relative to the package root directory. Files will be loaded in the listed order.",
+      "$ref": "#/$defs/ArrayOfString"
+    },
+    "languages": {
+      "description": "A list of localization files that Foundry can use to translate strings.",
+      "type": "array",
+      "uniqueItems": true,
+      "items": {
+        "description": "The language definition",
+        "type": "object",
+        "required": ["lang", "name", "path"],
+        "properties": {
+          "lang": {
+            "description": "The language code for this definition.",
+            "type": "string"
+          },
+          "name": {
+            "description": "The formal readable name of the language.",
+            "type": "string"
+          },
+          "path": {
+            "description": "Relative path to the JSON localization file.",
+            "type": "string"
+          }
         }
       }
     },
-    "scripts": {
-      "$ref": "#/definitions/stringArray",
-      "description": "A list of JavaScript file paths to include when this package is used. Paths are relative to the package root directory. Scripts will be loaded in the listed order as standard scripts."
-    },
-    "esmodules": {
-      "$ref": "#/definitions/stringArray",
-      "description": "A list of JavaScript ES modules to include when this package is used. Paths are relative to the package root directory. Modules will be loaded in the listed order as modules."
-    },
-    "styles": {
-      "$ref": "#/definitions/stringArray",
-      "description": "A list of CSS file paths to include when this package is used. Paths are relative to the package root directory. Files will be loaded in the listed order."
-    },
-    "languages": {
-      "type": "array",
-      "description": "A list of localization files that Foundry can use to translate strings.",
-      "uniqueItems": true,
-      "items": {
-        "type": "object",
-        "description": "The language definition",
-        "properties": {
-          "lang": {
-            "type": "string",
-            "description": "The language code for this definition."
-          },
-          "name": {
-            "type": "string",
-            "description": "The formal readable name of the language."
-          },
-          "path": {
-            "type": "string",
-            "description": "Relative path to the JSON localization file."
-          }
-        },
-        "required": ["lang", "name", "path"]
-      }
-    },
     "background": {
-      "type": "string"
+      "description": "The background image URL used in system and world tab",
+      "type": "string",
+      "format": "url"
     },
     "media": {
+      "description": "",
       "type": "array",
       "uniqueItems": true,
       "items": {
         "type": "object",
         "properties": {
           "type": {
+            "description": "",
             "type": "string",
             "enums": ["cover", "setup", "screenshot", "icon"]
           },
           "caption": {
+            "description": "",
             "type": "string"
           },
           "url": {
-            "type": "string"
+            "description": "",
+            "type": "string",
+            "format": "url"
           },
           "thumbnail": {
-            "type": "string"
+            "description": "",
+            "type": "string",
+            "format": "url"
           },
           "loop": {
+            "description": "",
             "type": "boolean"
           }
         }
       }
     },
     "packs": {
-      "type": "array",
       "description": "A list of Compendium packs that are included with the package and should be loaded.",
+      "type": "array",
       "uniqueItems": true,
       "items": {
-        "type": "object",
         "description": "The definition of a Compendium pack.",
+        "type": "object",
+        "required": ["name", "label", "system", "path", "type"],
         "properties": {
           "name": {
-            "type": "string",
-            "description": "Name of the Compendium pack. This should be a lowercase string with no special characters other than hyphens."
+            "description": "Name of the Compendium pack. This should be a lowercase string with no special characters other than hyphens.",
+            "type": "string"
           },
           "label": {
-            "type": "string",
-            "description": "Human readable label of the Compendium pack. This is displayed in the Compendium sidebar."
+            "description": "Human readable label of the Compendium pack. This is displayed in the Compendium sidebar.",
+            "type": "string"
           },
           "system": {
-            "type": ["string", "array"],
             "description": "The name of the system the Compendium pack is created for. This ensures Foundry knows this Compendium only works for that system. This may be a string or an array of strings.",
+            "type": ["string", "array"],
             "items": {
               "type": "string"
             }
           },
           "module": {
-            "type": "string",
-            "description": "The name of the module that provides the Compendium pack."
+            "description": "The name of the module that provides the Compendium pack.",
+            "type": "string"
           },
           "path": {
-            "type": "string",
-            "description": "The relative path to the Compendium .db file. Best practice is to put these in the /packs subdirectory."
+            "description": "The relative path to the Compendium .db file. Best practice is to put these in the /packs subdirectory.",
+            "type": "string"
           },
           "type": {
-            "type": "string",
             "description": "Each Compendium pack must designate which type of Entity it contains.",
+            "type": "string",
             "enum": [
               "Actor",
               "Item",
@@ -156,148 +154,279 @@
               "Scene"
             ]
           }
-        },
-        "required": ["name", "label", "system", "path", "type"]
+        }
       }
     },
     "relationships": {
+      "description": "",
       "type": "object",
       "properties": {
         "conflicts": {
+          "description": "List of conflicted packages",
           "type": "array",
           "uniqueItems": true,
-          "items": { "$ref": "#/definitions/package" }
+          "items": {
+            "$ref": "#/$defs/Package"
+          }
         },
         "recommends": {
+          "description": "List of recommended packages",
           "type": "array",
           "uniqueItems": true,
-          "items": { "$ref": "#/definitions/package" }
+          "items": {
+            "$ref": "#/$defs/Package"
+          }
         },
         "requires": {
+          "description": "List of required packages",
           "type": "array",
           "uniqueItems": true,
-          "items": { "$ref": "#/definitions/package" }
+          "items": {
+            "$ref": "#/$defs/Package"
+          }
         },
         "systems": {
+          "description": "List of compatible systems",
           "type": "array",
           "uniqueItems": true,
-          "items": { "$ref": "#/definitions/system" }
+          "items": {
+            "$ref": "#/$defs/System"
+          }
         }
       }
     },
     "initiative": {
+      "description": "Specifies the default initiative formula if applicable to the system.",
       "type": "string",
-      "description": "Specifies the default initiative formula if applicable to the system."
+      "deprecated": true
+    },
+    "grid": {
+      "description": "",
+      "type": "object",
+      "properties": {
+        "distance": {
+          "description": "Value specifying the default size of a grid space.",
+          "type": "number"
+        },
+        "units": {
+          "description": "A label that specifies the default unit of measure used by the system.",
+          "type": "string"
+        }
+      }
     },
     "gridDistance": {
+      "description": "Value specifying the default size of a grid space.",
       "type": "number",
-      "description": "Value specifying the default size of a grid space."
+      "deprecated": true
     },
     "gridUnits": {
+      "description": "A label that specifies the default unit of measure used by the system.",
       "type": "string",
-      "description": "A label that specifies the default unit of measure used by the system."
+      "deprecated": true
     },
     "primaryTokenAttribute": {
-      "type": ["null", "string"],
-      "description": "An attribute path within the system data model that points to an object that contains both a `value` and a `max` key. The prototype Token will automatically set its primary attribute to this value."
+      "description": "An attribute path within the system data model that points to an object that contains both a `value` and a `max` key. The prototype Token will automatically set its primary attribute to this value.",
+      "type": ["null", "string"]
     },
     "secondaryTokenAttribute": {
-      "type": ["null", "string"],
-      "description": "An attribute path within the system data model that points to an object that contains both a `value` and a `max` key. The prototype Token will automatically set its secondary attribute to this value."
+      "description": "An attribute path within the system data model that points to an object that contains both a `value` and a `max` key. The prototype Token will automatically set its secondary attribute to this value.",
+      "type": ["null", "string"]
     },
     "socket": {
-      "type": "boolean",
-      "description": "Enables the package to use a custom socket name to send and receive data from clients."
+      "description": "Enables the package to use a custom socket name to send and receive data from clients.",
+      "type": "boolean"
     },
     "url": {
-      "type": "string",
       "description": "A public URL that links to the package's website or repository. This will be displayed to allow users to find more information.",
+      "type": "string",
       "format": "url"
     },
     "manifest": {
-      "type": "string",
       "description": "A fixed URL that links to the latest release version of the package. This is used by Foundry to install and update packages.",
+      "type": "string",
       "format": "url"
     },
     "download": {
-      "type": "string",
       "description": "A public URL pointing to a ZIP file that will be downloaded by Foundry to install or update the package. This can be a Git archive, a file stored in the repository, or a file stored somewhere else.",
+      "type": "string",
       "format": "url"
     },
     "license": {
-      "type": "string",
-      "description": "Relative path to a file or a URL that points to the package's license."
+      "description": "Relative path to a file or a URL that points to the package's license.",
+      "type": "string"
     },
     "readme": {
-      "type": "string",
-      "description": "Relative path to a file or a URL that points to the package's readme or documentation."
+      "description": "Relative path to a file or a URL that points to the package's readme or documentation.",
+      "type": "string"
     },
     "bugs": {
-      "type": "string",
       "description": "A public URL where issues, suggestions, and bugs can be reported by users.",
+      "type": "string",
       "format": "url"
     },
     "changelog": {
-      "type": "string",
       "description": "A public URL where update and release notes for the package can be found.",
+      "type": "string",
       "format": "url"
+    },
+    "documentTypes": {
+      "description": "",
+      "type": "object",
+      "required": [],
+      "properties": {
+        "ActiveEffect": {
+          "description": "The top level data schema for Actor types.",
+          "$ref": "#/$defs/Entity"
+        },
+        "Actor": {
+          "description": "The top level data schema for Actor types.",
+          "$ref": "#/$defs/Entity"
+        },
+        "Item": {
+          "description": "The top level data schema for Item types.",
+          "$ref": "#/$defs/Entity"
+        },
+        "JournalEntryPage": {
+          "description": "The top level data schema for JournalEntryPage types.",
+          "$ref": "#/$defs/Entity"
+        },
+        "Cards": {
+          "description": "The top level data schema for Cards types.",
+          "$ref": "#/$defs/Entity"
+        },
+        "Card": {
+          "description": "The top level data schema for Card types.",
+          "$ref": "#/$defs/Entity"
+        }
+      }
     }
   },
-  "required": ["id", "title", "description", "version", "compatibility"],
-  "oneOf": [{ "required": ["author"] }, { "required": ["authors"] }],
-  "definitions": {
-    "stringArray": {
+  "oneOf": [
+    {
+      "required": ["author"]
+    },
+    {
+      "required": ["authors"]
+    }
+  ],
+  "$defs": {
+    "ArrayOfString": {
       "type": "array",
       "uniqueItems": true,
       "items": {
         "type": "string"
       }
     },
-    "_package": {
+    "Package": {
+      "description": "Represents an installable package",
+      "anyOf": [
+        {
+          "$ref": "#/$defs/Module"
+        },
+        {
+          "$ref": "#/$defs/System"
+        }
+      ]
+    },
+    "PackageCommon": {
+      "type": "object",
+      "required": ["id"],
+      "properties": {
+        "id": {
+          "description": "The unique package identifier",
+          "type": "string"
+        },
+        "manifest": {
+          "description": "A fixed URL that links to the latest release version of the dependent package",
+          "type": "string",
+          "format": "url"
+        },
+        "compatibility": {
+          "description": "Specifies the latest package version this package is compatible with.",
+          "$ref": "#/$defs/Compatibility"
+        }
+      }
+    },
+    "Module": {
+      "description": "Represents an installable extension module",
+      "$ref": "#/$defs/PackageCommon",
+      "properties": {
+        "type": {
+          "const": "module"
+        }
+      }
+    },
+    "System": {
+      "description": "Represents an installable game system",
+      "$ref": "#/$defs/PackageCommon",
+      "properties": {
+        "type": {
+          "const": "system"
+        }
+      }
+    },
+    "Compatibility": {
+      "description": "Defines the compatibility versions of a module or system",
       "type": "object",
       "properties": {
-        "id": {},
-        "manifest": {},
-        "compatibility": {}
+        "minimum": {
+          "description": "The minimum version for which the package will not function before.",
+          "type": ["number", "string"]
+        },
+        "maximum": {
+          "description": "The maximum version for which the package will not function after.",
+          "type": ["number", "string"]
+        },
+        "verified": {
+          "description": "The package has been successfully tested with this version.",
+          "type": ["number", "string"]
+        }
+      }
+    },
+    "Entity": {
+      "type": "object",
+      "properties": {
+        "types": {
+          "description": "Array of strings defining the entity subtypes defined by the schema.",
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "templates": {
+          "description": "Template schemas that can be reused by entity subtypes.",
+          "type": "object",
+          "additionalProperties": {
+            "description": "Definition of a template schema.",
+            "type": "object",
+            "additionalProperties": {
+              "description": "Custom property defined for this schema."
+            }
+          }
+        },
+        "htmlFields": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
       },
-      "required": ["id", "manifest"],
-      "additionalProperties": false
-    },
-    "system": {
-      "allOf": [
-        { "$ref": "#/definitions/_package" },
-        {
-          "type": "object",
-          "properties": {
-            "type": {
-              "type": "string",
-              "enum": ["system"]
+      "additionalProperties": {
+        "description": "Definition of an entity subtype.",
+        "type": "object",
+        "properties": {
+          "templates": {
+            "description": "Array of strings specifying which template schemas to apply to this type.",
+            "type": "array",
+            "items": {
+              "type": "string"
             }
-          },
-          "additionalProperties": false
+          }
+        },
+        "additionalProperties": {
+          "description": "Custom property defined for this schema."
         }
-      ]
-    },
-    "module": {
-      "allOf": [
-        { "$ref": "#/definitions/_package" },
-        {
-          "type": "object",
-          "properties": {
-            "type": {
-              "type": "string",
-              "enum": ["module"]
-            }
-          },
-          "additionalProperties": false
-        }
-      ]
-    },
-    "package": {
-      "anyOf": [
-        { "$ref": "#/definitions/system" },
-        { "$ref": "#/definitions/module" }
-      ]
+      }
     }
   }
 }

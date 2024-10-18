@@ -4,45 +4,63 @@
   "title": "JSON schema for Foundry VTT template.json files.",
   "properties": {
     "Actor": {
-      "$ref": "#/definitions/entity",
-      "description": "The top level data schema for Actor types."
+      "description": "The top level data schema for Actor types.",
+      "$ref": "#/$defs/Entity"
     },
     "Item": {
-      "$ref": "#/definitions/entity",
-      "description": "The top level data schema for Item types."
+      "description": "The top level data schema for Item types.",
+      "$ref": "#/$defs/Entity"
+    },
+    "JournalEntryPage": {
+      "description": "The top level data schema for JournalEntryPage types.",
+      "$ref": "#/$defs/Entity"
+    },
+    "Cards": {
+      "description": "The top level data schema for Cards types.",
+      "$ref": "#/$defs/Entity"
+    },
+    "Card": {
+      "description": "The top level data schema for Card types.",
+      "$ref": "#/$defs/Entity"
     }
   },
   "additionalProperties": false,
-  "definitions": {
-    "entity": {
+  "$defs": {
+    "Entity": {
       "type": "object",
       "properties": {
         "types": {
-          "type": "array",
           "description": "Array of strings defining the entity subtypes defined by the schema.",
+          "type": "array",
           "items": {
             "type": "string"
           }
         },
         "templates": {
-          "type": "object",
           "description": "Template schemas that can be reused by entity subtypes.",
+          "type": "object",
           "additionalProperties": {
-            "type": "object",
             "description": "Definition of a template schema.",
+            "type": "object",
             "additionalProperties": {
               "description": "Custom property defined for this schema."
             }
           }
+        },
+        "htmlFields": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
         }
       },
       "additionalProperties": {
-        "type": "object",
         "description": "Definition of an entity subtype.",
+        "type": "object",
         "properties": {
           "templates": {
-            "type": "array",
             "description": "Array of strings specifying which template schemas to apply to this type.",
+            "type": "array",
             "items": {
               "type": "string"
             }
